@@ -256,9 +256,11 @@ Values in pattern is compared to the object using the == operator on the object 
 
 Type tests are performed in the same way as with the **is** operator.
 
-List destructuring patterns first checks that the object beeing tested is a List to avoid NoSuchMethod errors. Then it validate the length to be the same or, if `...` is specified, at least the same as the number of element as beeing destructed. This is to avoid a RangeError if the List is smaller than the number of destructured elements. After those saftey checks the specified elements is read from the list and matched against there patterns.
+List destructuring patterns first checks that the object beeing tested is a List to avoid NoSuchMethod errors. Then it validate the length to be the same or, if `...` is specified, at least the same as the number of element as beeing destructed. This is to avoid a RangeError if the List is smaller than the number of destructured elements. After those saftey checks the specified elements is read from the list and matched against their patterns.
 
-Object destructuring patterns first does a type check to avoid NoSuchMethod errors. Then the specified properties are read and matched against there patterns.
+Object destructuring patterns first does a type check to avoid NoSuchMethod errors. Then the specified properties are read and matched against their patterns.
+
+If the same identifier binding occurs multiple times in the same match clause, it corresponds to an extra condition that all the values matched by these identifier patterns are equal.
 
 ## Alternatives
 
