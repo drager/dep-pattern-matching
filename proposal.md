@@ -52,7 +52,7 @@ fib(int n) => match (n) {
 
 ```dart
 fib(int n) {
-  if (n < 2) return n;
+  if (n == 0 || n == 1) return n;
   return fib(n-1) + fib(n-2);
 }
 ```
@@ -281,11 +281,6 @@ A good language is a cohesive whole. Even a small, well-defined proposal still h
 
 ## Deliverables
 
-We have started working on analyzer support and a transpiler. Both are still work in progress though.
-The analyzer should have pretty good support except for the object destructuring pattern. The fork can currently be found in https://github.com/Pajn/dart-analyzer
-
-The transpiler have parsing support by using the forked analyzer and can transpile some of the cases but have no support for writing out the transpiled files yet. It can be found in https://github.com/drager/match-expression-transpiler
-
 ### Language specification changes
 
 #### New syntax
@@ -336,18 +331,10 @@ In *20.1.1 Reserved Words* add **match**
 
 ### A working implementation
 
-Nothing flushes out the problems with a feature quite like writing it in cold, hard executable code. Before a proposal can be approved, some kind of working implementation must be provided.
+We have started working on analyzer support and a transpiler. Both are still work in progress though.
+The analyzer should have pretty good support except for the object destructuring pattern. The fork can currently be found in https://github.com/Pajn/dart-analyzer
 
-Again, you don't have to have this on day one. However, you should make as much progress on this as early as you can. You *are* expected to be able to write working code, so there's nothing really holding you back. Doing this before you show your proposal to the world is a good sanity check to ensure you don't propose something that turns out to be impossible to implement. (It happens to the best of us.)
-
-It's not necessary to actually implement your feature in the native Dart VM or dart2js compiler (though you can and will certainly get street cred for doing so). Instead, you may:
-
-* Write some sort of standalone prototype implementation.
-* Write a [transpiler][] that takes Dart code using your feature and translates it to "vanilla" Dart code.
-
-[transpiler]: https://en.wikipedia.org/wiki/Source-to-source_compiler
-
-What matters is that you demonstrate that the feature can feasibly be implemented in a reasonable amount of code with good performance.
+The transpiler have parsing support by using the forked analyzer and can transpile some of the cases but have no support for writing out the transpiled files yet. It can be found in https://github.com/drager/match-expression-transpiler
 
 ### Tests
 
