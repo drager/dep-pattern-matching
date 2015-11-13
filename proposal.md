@@ -126,7 +126,7 @@ match ([2, 5]) {
 ```dart
 var x = [2, 5];
 
-if (x is List && x.length == 2 && x[0] == 2 && x[1] == x[1]) {
+if (x is List && x.length == 2 && x[0] == 2) {
   var b = x[1];
   print('x is 2, b is $b');
 } else if (x is List && x.length == 2 && x[1] == 5) {
