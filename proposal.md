@@ -115,7 +115,6 @@ Can be used to match on multiple variables in the same match expression.
 match ([2, 5]) {
   [2, b] => print('x is 2, b is $b');
   [a, 5] => print('x is $a, b is 5');
-  [a, a] => print('the zero and first indices are $a');
   [a, b is int] => print('a is $a, b is the integer $b');
   [a, b] => print('a is $a, b is $b');
   [a, b, ...] => print('a is $a, b is $b but the list has more than two elements');
@@ -132,8 +131,6 @@ if (x is List && x.length == 2 && x[0] == 2) {
 } else if (x is List && x.length == 2 && x[1] == 5) {
   var a = x[0];
   print('x is $a, b is 5');
-} else if (x is List && x.length == 2 && x[1] == x[0]) {
-  print('the zero and first indices are $a');
 } else if (x is List && x.length == 2 && x[1] is int) {
   var a = x[0];
   int b = x[1];
@@ -248,19 +245,23 @@ if (x % 2 == 0) {
 
 The match expression tries to match the patterns in order from first specified to last. For arms with alternatives the patterns are tried from left to right.
 If a pattern matches that do have a pattern guard, the guard expression is evaluated. If the produced object evaluates to false using the same semantics as an if statement, the pattern is considered to not have matched. When a matching pattern is found the arm's expression is evaluated and the produced object is returned from the match expression.
-If no matching pattern is found the match expression throws a MatchError.
+If no matching pattern is found the match expression throws a MatchError. It is a static warning if the match expression is not exhaustive. A match expression if considered exhastive if any of the following condifitions hold:
+- the match expression does have a default/identifier pattern
+- the static type of the expression being matched is an enumerated typed and all of its elements are covered
+- the static type of the expression being matched is a List and destructured list pattern allowing all lists exists (`[...]`)
+- a destructured object pattern that allows all objects of the static type of the expression being matched exists.
+- a type test pattern that allows objects of the static type of the expression being matched exists.
 
 Non qualified identifiers in patterns is implicitly declared as var, or in a type test pattern as the type beeing tested, and then assigned the value of the object beeing matched against. This is true also for identifiers in list or object destructors.
+It is a compile-time error if the same identifier binding occurs multiple times in the same match clause.
 
 Values in pattern is compared to the object using the == operator on the object beeing matched.
 
-Type tests are performed in the same way as with the **is** operator.
+Type tests are performed in the same way as with the **is** operator exept that the left-hand side can only be a non qualified identifier.
 
 List destructuring patterns first checks that the object beeing tested is a List to avoid NoSuchMethod errors. Then it validate the length to be the same or, if `...` is specified, at least the same as the number of element as beeing destructed. This is to avoid a RangeError if the List is smaller than the number of destructured elements. After those saftey checks the specified elements is read from the list and matched against their patterns.
 
-Object destructuring patterns first does a type check to avoid NoSuchMethod errors. Then the specified properties are read and matched against their patterns.
-
-If the same identifier binding occurs multiple times in the same match clause, it corresponds to an extra condition that all the values matched by these identifier patterns are equal.
+Object destructuring patterns first does a type check to avoid NoSuchMethod errors. Then the specified properties are read and matched against their patterns. It is a static warning if getting the specified property of an object the specified type would issue a static warning.
 
 ## Alternatives
 
@@ -291,7 +292,7 @@ A good language is a cohesive whole. Even a small, well-defined proposal still h
     ;
 
     destructuredListPattern:
-      ‘[’ (pattern (‘, ’ pattern)* (‘...’ | ‘, ’)? )? ‘]’
+      ‘[’ (pattern (‘, ’ pattern)* ‘, ’? )? ‘...’? ‘]’
     ;
     
     destructuredObjectPatternEntry:
