@@ -155,7 +155,6 @@ Allows specification of patterns on properties as well as declares the propertie
 match (new Point(2, 5)) {
   Point {x: 2, y} => print('x is 2, y is $y');
   Point {x, y: 5} => print('x is $x, y is 5');
-  Point {x, y: x} => print('both x and y is $x');
   Point {x, y} => print('x is $x, y is $y);
 };
 ```
@@ -169,10 +168,6 @@ if (x is Point && x.x == 2) {
   var _ = x;
   var x = _.x;
   print('x is $x, y is 5');
-} else if (x is Point && x.y == x.x) {
-  var _ = x;
-  var x = _.x;
-  print('both x and y is $x');
 } else if (x is Point) {
   var _ = x;
   var x = _.x;
@@ -264,6 +259,18 @@ List destructuring patterns first checks that the object beeing tested is a List
 Object destructuring patterns first does a type check to avoid NoSuchMethod errors. Then the specified properties are read and matched against their patterns. It is a static warning if getting the specified property of an object the specified type would issue a static warning.
 
 ## Alternatives
+
+As if and switch statements already exists in the language this alternatives description will focus on different pattern matching implementations.
+
+### Extractor objects
+Scala has the concept of extractor objects where using apply and unapply methods objects can be destructured and their properties matched. This is instead solved in this DEP by using object destructuring which doesn't need implementation of additional methods and allows the reader of the pattern to see which properties are matched against.
+
+### Different syntax
+During discussion on the [mailing list]() different syntax propassals have come up.
+
+#### case keyword
+Case could be used as a keyword in each match clause so that the syntax is  
+**case** pattern (‘|’ pattern)* patternGuard? ‘=>’ expressionStatement
 
 While you may think of your solution as a perfect snowflake, there are other pretty snowflakes out there. Describe alternate solutions that cover the same space as this proposal. Compare them to the proposal and each other and explain why they were rejected.
 
